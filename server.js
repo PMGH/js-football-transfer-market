@@ -103,6 +103,12 @@ app.post("/players", function(req, res){
 	res.redirect("/");
 });
 
+// delete all
+app.post("/players/delete-all", function(req, res){
+	db.collection("players").remove();
+	res.redirect("/");
+});
+
 // get home page (index.html)
 app.get("/", function(req, res){
 	res.sendFile(__dirname + "/client/build/index.html");
