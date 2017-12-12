@@ -1,20 +1,20 @@
 var express = require("express");
 var app = express();
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
 app.use(express.static("client/build"));
 
 
 // set up mongo client
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require("mongodb").MongoClient;
 
-MongoClient.connect("mongodb://localhost:27017/transfer_market", function(err, database){
+MongoClient.connect("mongodb://localhost:27017/transfer_market", function(err, client){
 	if (err){
 		return console.log(err);
 	}
-	db = database;
+	db = client.db("transfer_market");
 	console.log("Connected to DB");
 
 	app.listen(3000, function(){
@@ -23,6 +23,44 @@ MongoClient.connect("mongodb://localhost:27017/transfer_market", function(err, d
 
 });
 
+
+// get all transfer-listed players
+app.get("/players/transfer-listed", function(req, res){
+	db.collection("players").find({ transferListed: true }).toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
+// get all transer-listed players by club
+app.get("/players/transfer-listed/club/:club", function(req, res){
+	db.collection("players").find({
+		club: req.params.club,
+		transferListed: true
+	}).toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
+// get all transfer-listed players by position
+app.get("/players/transfer-listed/position/:position", function(req, res){
+	db.collection("players").find({
+		position: req.params.position,
+		transferListed: true
+	}).toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
+// get home page (index.html)
 app.get("/", function(req, res){
 	res.sendFile(__dirname + "/client/build/index.html");
 });
