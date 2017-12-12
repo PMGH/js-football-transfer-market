@@ -60,6 +60,37 @@ app.get("/players/transfer-listed/position/:position", function(req, res){
 	});
 });
 
+// get all players by club
+app.get("/players/club/:club", function(req, res){
+	db.collection("players").find({ club: req.params.club }).toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
+// get all players by position
+app.get("/players/position/:position", function(req, res){
+	db.collection("players").find({ position: req.params.position }).toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
+// get all players
+app.get("/players", function(req, res){
+	// find all the players in the db collection 'players' and return as an array within the http response
+	db.collection("players").find().toArray(function(err, results){
+		if (err){
+			return console.log(err);
+		}
+		res.json(results);
+	});
+});
+
 // get home page (index.html)
 app.get("/", function(req, res){
 	res.sendFile(__dirname + "/client/build/index.html");
