@@ -91,6 +91,18 @@ app.get("/players", function(req, res){
 	});
 });
 
+// create a player
+app.post("/players", function(req, res){
+	db.collection("players").save(req.body, function(err, result){
+		if (err){
+			return console.log(err);
+		}
+
+		console.log("Saved to database");
+	});
+	res.redirect("/");
+});
+
 // get home page (index.html)
 app.get("/", function(req, res){
 	res.sendFile(__dirname + "/client/build/index.html");
