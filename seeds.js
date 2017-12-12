@@ -1,7 +1,7 @@
 use transfer_market;
 db.dropDatabase();
 
-var players = [
+var celticfc = [
   {
     name: "Craig Gordon",
     nationality: "Scotland",
@@ -33,7 +33,10 @@ var players = [
     position: "Midfielder",
     value: "1500000",
     transferListed: true
-  },
+  }
+];
+
+var arsenalfc = [
   {
     name: "Jack Wilshere",
     nationality: "England",
@@ -41,8 +44,37 @@ var players = [
     position: "Midfielder",
     value: "10000000",
     transferListed: true
+  },
+  {
+    name: "Olivier Giroud",
+    nationality: "France",
+    club: "Arsenal FC",
+    position: "Striker",
+    value: "30000000",
+    transferListed: false
+  },
+  {
+    name: "Nacho Monreal",
+    nationality: "Spain",
+    club: "Arsenal FC",
+    position: "Defender",
+    value: "15000000",
+    transferListed: true
   }
 ];
 
-db.transfer_market.insertMany(players);
-db.transfer_market.find();
+var arrays = [celticfc, arsenalfc];
+
+var populatePlayers = function(arrays){
+  var players = [];
+  arrays.forEach(function(arr){
+    arr.forEach(function(player){
+      players.push(player);
+    });
+  });
+  db.players.insertMany(players);
+}
+
+populatePlayers(arrays);
+
+db.players.find();
