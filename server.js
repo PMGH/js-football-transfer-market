@@ -23,6 +23,10 @@ MongoClient.connect("mongodb://localhost:27017/transfer_market", function(err, c
 
 });
 
+// get home page (index.html)
+app.get("/", function(req, res){
+	res.sendFile(__dirname + "/client/build/index.html");
+});
 
 // get all transfer-listed players
 app.get("/players/transfer-listed", function(req, res){
@@ -107,9 +111,4 @@ app.post("/players", function(req, res){
 app.post("/players/delete-all", function(req, res){
 	db.collection("players").remove();
 	res.redirect("/");
-});
-
-// get home page (index.html)
-app.get("/", function(req, res){
-	res.sendFile(__dirname + "/client/build/index.html");
 });

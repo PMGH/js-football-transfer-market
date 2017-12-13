@@ -65,12 +65,14 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+var clubView = __webpack_require__(3);
 
 var makeRequest = function(url, callback){
 	var request = new XMLHttpRequest();
 	request.open("GET", url);
-	request.addEventListener(url, callback);
+	request.addEventListener('load', callback);
 	request.send();
 };
 
@@ -82,14 +84,50 @@ var requestComplete = function(){
 	var jsonString = this.responseText;
 	var apiData = JSON.parse(jsonString);
 	console.log(apiData);
+	var clubs = [];
+	console.log(clubs);
+	apiData.forEach(function(player){
+		if (!clubs.includes(player.club)){
+			clubs.push(player.club);
+		}
+	});
+	var ui = new clubView(clubs);
 };
 
 var app = function(){
+	console.log("Running app.js");
 	var url = "/players";
 	makeRequest(url, requestComplete);
 };
 
 window.addEventListener("load", app);
+
+
+/***/ }),
+/* 1 */,
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports) {
+
+var ClubView = function(clubs){
+  this.render(clubs);
+};
+
+ClubView.prototype = {
+  render: function(clubs){
+    console.log(clubs);
+    clubs.forEach( function(club){
+      var li = document.createElement('li');
+      var text = document.createElement('p');
+      var ul = document.getElementById('club-list');
+      text.innerText = club;
+      li.appendChild(text);
+      ul.appendChild(li);
+    });
+  }
+}
+
+module.exports = ClubView;
 
 
 /***/ })
